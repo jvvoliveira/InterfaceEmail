@@ -1,0 +1,30 @@
+<form id="cadastro">
+    Nome:<input type="text" name="nome" id="nome"/><br/>
+    Username:<input type="text" name="username" id="username"/><br/>
+    Password:<input type="password" name="password" id="password"/><br/>
+    <input type="submit" value="Enviar"/>
+</form>
+
+<script>
+    var form = document.getElementById("cadastro");
+    form.addEventListener("submit",function(e){
+        e.preventDefault();
+        var obj = {
+            name: document.getElementById("name").value,
+            username: document.getElementById("username").value,
+            password: document.getElementById("password").value,
+        }
+        var json = JSON.stringify(obj);
+
+        var xhr = new XMLHttpRequest();
+        var url = "http://www.henriquesantos.pro.br:8080/api/trello/users";
+        xhr.open("POST",url,"true");
+        xhr.setRequestHeader("Content-type","application/json");
+        xhr.onreadystatechange = function(){
+            if(xhr.readyState == 4 && xhr.status == 200){
+                console.log(xhr.responseText);
+            }
+        }
+        xhr.send(json);
+    });
+</script>
