@@ -29,7 +29,7 @@
         </div>
     </nav>
 
-    <div class="container">
+    <div class="container" id="formEntrada">
         <div class="row">
             <form id="cadastro">
                 <div class="form-group col-md-12">
@@ -72,13 +72,13 @@
     var token;
     mostrarCadastro();
     function mostrarCadastro(){
-        cadastro.style.visibility = "visible";
-        login.style.visibility = "hidden";
+        cadastro.style.display = "inline";
+        login.style.display = "none";
     };
 
     function mostrarLogin(){
-        cadastro.style.visibility = "hidden";
-        login.style.visibility = "visible";
+        cadastro.style.display = "none";
+        login.style.display = "inline";
     };
 
     cadastro.addEventListener("submit", function (e) {
