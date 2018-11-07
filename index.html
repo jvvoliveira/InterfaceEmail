@@ -1,14 +1,89 @@
-<form id="cadastro">
-    Nome:<input type="text" name="nome" id="nome"/><br/>
-    Username:<input type="text" name="username" id="username"/><br/>
-    Password:<input type="password" name="password" id="password"/><br/>
-    <input type="submit" value="Enviar"/>
-</form>
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Projeto</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+</head>
+
+<body>
+    <nav class="navbar navbar-expand navbar-light bg-light">
+        <a class="navbar-brand" href="#">Navbar</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+            aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="#" id="linkCadastro" onclick="mostrarCadastro()">Cadastro</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" id="linkLogin" onclick="mostrarLogin()">Login</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="row">
+            <form id="cadastro">
+                <div class="form-group col-md-12">
+                    <label for="name">Nome</label>
+                    <input type="text" class="form-control" name="name" id="name" required>
+                </div>
+                <div class="form-group col-md-12">
+                    <label for="username">Username</label>
+                    <input type="text" class="form-control" name="username" id="username" required>
+                </div>
+                <div class="form-group col-md-12">
+                    <label for="password">Password</label>
+                    <input type="password" class="form-control" name="password" id="password" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Cadastrar</button>
+            </form>
+
+            <form id="login">
+                <div class="form-group col-md-12">
+                    <label for="username">Username</label>
+                    <input type="text" class="form-control" name="username" id="username" required>
+                </div>
+                <div class="form-group col-md-12">
+                    <label for="password">Password</label>
+                    <input type="password" class="form-control" name="password" id="password" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Entrar</button>
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>
 
 <script>
-    var form = document.getElementById("cadastro");
-    form.addEventListener("submit",function(e){
+    var cadastro = document.getElementById("cadastro");
+    var login = document.getElementById("login");
+    //var linkLogin = document.getElementById("linkLogin");
+    //var linkCadastro = document.getElementById("linkCadastro");
+    var token;
+    mostrarCadastro();
+    function mostrarCadastro(){
+        cadastro.style.visibility = "visible";
+        login.style.visibility = "hidden";
+    };
+
+    function mostrarLogin(){
+        cadastro.style.visibility = "hidden";
+        login.style.visibility = "visible";
+    };
+
+    cadastro.addEventListener("submit", function (e) {
         e.preventDefault();
+
         var obj = {
             name: document.getElementById("name").value,
             username: document.getElementById("username").value,
@@ -17,14 +92,49 @@
         var json = JSON.stringify(obj);
 
         var xhr = new XMLHttpRequest();
-        var url = "http://www.henriquesantos.pro.br:8080/api/trello/users";
-        xhr.open("POST",url,"true");
-        xhr.setRequestHeader("Content-type","application/json");
-        xhr.onreadystatechange = function(){
-            if(xhr.readyState == 4 && xhr.status == 200){
+        var url = "http://www.henriquesantos.pro.br:8080/api/trello/users/new";
+        xhr.open("POST", url, "true");
+        xhr.setRequestHeader("Content-type", "application/json");
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == 4 && xhr.status == 200) {
                 console.log(xhr.responseText);
+                alert(obj.name+", seu cadastro foi feito com sucesso!");
+            }
+            else if (xhr.readyState == 4 && xhr.status == 400) {
+               alert("O username "+obj.username+" já existe no sistema!");
             }
         }
         xhr.send(json);
+
+        mostrarLogin();
     });
+
+    login.addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        var obj = {
+            username: document.getElementById("username").value,
+        }
+        
+
+    });
+
+    function recuperarUsuarios() {
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            console.log(this.readyState);
+            if (this.readyState == 4 && this.status == 200) {
+                var retorno = xhttp.responseText;
+                var retornoJSON = JSON.parse(retorno);
+                retornoJSON.forEach(function (element) {
+                    var item = document.createElement("li");
+                    item.innerHTML = `${element.username} - ${element.token}`;
+                    lista.appendChild(item);
+                });
+            }
+        }
+        var url = "http://www.henriquesantos.pro.br:8080/api/trello/users";
+        xhttp.open("POST", url);
+        xhttp.send();
+    }
 </script>
