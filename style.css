@@ -1,4 +1,14 @@
+.navbar{
+    background-color: blue;
+}
 form{
     display: none;
-    border-style: solid;
+    /*border-style: solid;*/
+    position: center;
+}
+.card{
+    margin: 20px;
+}
+#infoUsu{
+    margin: 5px;
 }

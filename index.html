@@ -5,12 +5,13 @@
     <meta charset="utf-8">
     <title>Projeto</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="style.css">
+
     <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-    <nav class="navbar navbar-expand navbar-light bg-light">
+    <nav class="navbar navbar-expand navbar-light">
         <a class="navbar-brand" href="#">Navbar</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
             aria-expanded="false" aria-label="Toggle navigation">
@@ -29,36 +30,56 @@
         </div>
     </nav>
 
-    <div class="container" id="formEntrada">
+    <div class="container-fluid">
         <div class="row">
-            <form id="cadastro">
-                <div class="form-group col-md-12">
-                    <label for="name">Nome</label>
-                    <input type="text" class="form-control" name="name" id="name" required>
-                </div>
-                <div class="form-group col-md-12">
-                    <label for="username">Username</label>
-                    <input type="text" class="form-control" name="username" id="username" required>
-                </div>
-                <div class="form-group col-md-12">
-                    <label for="password">Password</label>
-                    <input type="password" class="form-control" name="password" id="password" required>
-                </div>
-                <button type="submit" class="btn btn-primary">Cadastrar</button>
-            </form>
+            <div class="col-md-4"></div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <div id="infoUsu" class="row">
+                            <form id="cadastro">
+                                <h2>Cadastro</h2>
+                                <div class="form-group col-md-12">
+                                    <label for="name">Nome</label>
+                                    <input type="text" class="form-control" name="name" id="name" required>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <label for="username">Usuário</label>
+                                    <input type="text" class="form-control" name="username" id="username" required>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <label for="password">Senha</label>
+                                    <input type="password" class="form-control" name="password" id="password" required>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <label for="password2">Confirmar senha</label>
+                                    <input type="password" class="form-control" name="password2" id="password2" required>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Cadastrar</button>
+                            </form>
 
-            <form id="login">
-                <div class="form-group col-md-12">
-                    <label for="username">Username</label>
-                    <input type="text" class="form-control" name="username" id="username" required>
+                            <form id="login">
+                                <h2>Login</h2>
+                                <div class="form-group col-md-12">
+                                    <label for="username">Usuário</label>
+                                    <input type="text" class="form-control" name="username" id="username" required>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <label for="password">Senha</label>
+                                    <input type="password" class="form-control" name="password" id="password" required>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Entrar</button>
+                            </form>
+                        </div>
+                    </div>
                 </div>
-                <div class="form-group col-md-12">
-                    <label for="password">Password</label>
-                    <input type="password" class="form-control" name="password" id="password" required>
-                </div>
-                <button type="submit" class="btn btn-primary">Entrar</button>
-            </form>
+            </div>
+            <div class="col-md-4"></div>
         </div>
+
+        <!--<div class="container" id="formEntrada">-->
+
+        <!--</div>-->
     </div>
 </body>
 
@@ -70,13 +91,13 @@
     //var linkLogin = document.getElementById("linkLogin");
     //var linkCadastro = document.getElementById("linkCadastro");
     var token;
-    mostrarCadastro();
-    function mostrarCadastro(){
+    mostrarLogin();
+    function mostrarCadastro() {
         cadastro.style.display = "inline";
         login.style.display = "none";
     };
 
-    function mostrarLogin(){
+    function mostrarLogin() {
         cadastro.style.display = "none";
         login.style.display = "inline";
     };
@@ -88,6 +109,7 @@
             name: document.getElementById("name").value,
             username: document.getElementById("username").value,
             password: document.getElementById("password").value,
+            //password2: document.getElementById("password2").value,
         }
         var json = JSON.stringify(obj);
 
@@ -98,10 +120,10 @@
         xhr.onreadystatechange = function () {
             if (xhr.readyState == 4 && xhr.status == 200) {
                 console.log(xhr.responseText);
-                alert(obj.name+", seu cadastro foi feito com sucesso!");
+                alert(obj.name + ", seu cadastro foi feito com sucesso!");
             }
             else if (xhr.readyState == 4 && xhr.status == 400) {
-               alert("O username "+obj.username+" já existe no sistema!");
+                alert("O username " + obj.username + " já existe no sistema!");
             }
         }
         xhr.send(json);
@@ -115,7 +137,7 @@
         var obj = {
             username: document.getElementById("username").value,
         }
-        
+
 
     });
 
