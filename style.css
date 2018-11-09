@@ -1,14 +1,27 @@
-.navbar{
-    background-color: blue;
+a{
+    color:white;
+}
+nav{
+    background-color: rgb(75, 114, 172);
+}
+h2{
+    color:white;
 }
 form{
     display: none;
-    /*border-style: solid;*/
-    position: center;
 }
 .card{
     margin: 20px;
+    background-color: rgb(75, 114, 172);
 }
 #infoUsu{
-    margin: 5px;
+    margin: 20px;
+}
+body{
+    background-image: url("imagens/mailbox.jpg");
+}
+button{
+    background-color:white;
+    color: rgb(75, 114, 172);
+    position: relative;
 }

@@ -11,8 +11,8 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-expand navbar-light">
-        <a class="navbar-brand" href="#">Navbar</a>
+    <nav class="navbar navbar-expand">
+        <a class="navbar-brand" href="#">Email</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
             aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -32,54 +32,52 @@
 
     <div class="container-fluid">
         <div class="row">
-            <div class="col-md-4"></div>
-            <div class="col-md-4">
+            <div class="col-md-4 col-sm-4">
+            </div>
+            <div class="col-md-4 col-sm-4">
+            </div>
+            <div class="col-md-4 col-sm-4">
                 <div class="card">
                     <div class="card-body">
                         <div id="infoUsu" class="row">
                             <form id="cadastro">
                                 <h2>Cadastro</h2>
-                                <div class="form-group col-md-12">
+                                <div class="form-group">
                                     <label for="name">Nome</label>
                                     <input type="text" class="form-control" name="name" id="name" required>
                                 </div>
-                                <div class="form-group col-md-12">
+                                <div class="form-group">
                                     <label for="username">Usuário</label>
                                     <input type="text" class="form-control" name="username" id="username" required>
                                 </div>
-                                <div class="form-group col-md-12">
+                                <div class="form-group">
                                     <label for="password">Senha</label>
                                     <input type="password" class="form-control" name="password" id="password" required>
                                 </div>
-                                <div class="form-group col-md-12">
+                                <div class="form-group">
                                     <label for="password2">Confirmar senha</label>
                                     <input type="password" class="form-control" name="password2" id="password2" required>
                                 </div>
-                                <button type="submit" class="btn btn-primary">Cadastrar</button>
+                                <button type="submit" class="btn">Cadastrar</button>
                             </form>
 
                             <form id="login">
                                 <h2>Login</h2>
-                                <div class="form-group col-md-12">
+                                <div class="form-group">
                                     <label for="username">Usuário</label>
                                     <input type="text" class="form-control" name="username" id="username" required>
                                 </div>
-                                <div class="form-group col-md-12">
+                                <div class="form-group">
                                     <label for="password">Senha</label>
                                     <input type="password" class="form-control" name="password" id="password" required>
                                 </div>
-                                <button type="submit" class="btn btn-primary">Entrar</button>
+                                <button type="submit" class="btn">Entrar</button>
                             </form>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-4"></div>
         </div>
-
-        <!--<div class="container" id="formEntrada">-->
-
-        <!--</div>-->
     </div>
 </body>
 
@@ -109,8 +107,13 @@
             name: document.getElementById("name").value,
             username: document.getElementById("username").value,
             password: document.getElementById("password").value,
-            //password2: document.getElementById("password2").value,
+            password2: document.getElementById("password2").value,
         }
+        if(obj.password != obj.password2){
+            alert("Senha não confirmada! Digite novamente!");
+            return;
+        }
+
         var json = JSON.stringify(obj);
 
         var xhr = new XMLHttpRequest();
@@ -136,8 +139,8 @@
 
         var obj = {
             username: document.getElementById("username").value,
+            senha: document.getElementById("password").value,
         }
-
 
     });
 
