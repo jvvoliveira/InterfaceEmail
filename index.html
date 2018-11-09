@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Projeto</title>
+    <title>Email</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
@@ -32,50 +32,51 @@
 
     <div class="container-fluid">
         <div class="row">
-            <div class="col-md-4 col-sm-4">
+            <!--<div class="col-md-3 col-sm-3">
             </div>
-            <div class="col-md-4 col-sm-4">
-            </div>
-            <div class="col-md-4 col-sm-4">
-                <div class="card">
-                    <div class="card-body">
-                        <div id="infoUsu" class="row">
-                            <form id="cadastro">
-                                <h2>Cadastro</h2>
-                                <div class="form-group">
-                                    <label for="name">Nome</label>
-                                    <input type="text" class="form-control" name="name" id="name" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="username">Usuário</label>
-                                    <input type="text" class="form-control" name="username" id="username" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="password">Senha</label>
-                                    <input type="password" class="form-control" name="password" id="password" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="password2">Confirmar senha</label>
-                                    <input type="password" class="form-control" name="password2" id="password2" required>
-                                </div>
-                                <button type="submit" class="btn">Cadastrar</button>
-                            </form>
-
-                            <form id="login">
-                                <h2>Login</h2>
-                                <div class="form-group">
-                                    <label for="username">Usuário</label>
-                                    <input type="text" class="form-control" name="username" id="username" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="password">Senha</label>
-                                    <input type="password" class="form-control" name="password" id="password" required>
-                                </div>
-                                <button type="submit" class="btn">Entrar</button>
-                            </form>
+            <div class="col-md-3 col-sm-3">
+            </div>-->
+            <div class="col-md-3 offset-md-7 col-sm-3 offset-sm-7 col-xs-3 offset-xs-7">
+                <!--<div class="card">
+                    <div class="card-body">-->
+                <div id="infoUsu" class="row">
+                    <form id="cadastro">
+                        <h2>Cadastro</h2>
+                        <div class="form-group">
+                            <label for="name">Nome</label>
+                            <input type="text" class="form-control" name="name" id="name" required>
                         </div>
-                    </div>
+                        <div class="form-group">
+                            <label for="username">Usuário</label>
+                            <input type="text" class="form-control" name="username" id="username" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Senha</label>
+                            <input type="password" class="form-control" name="password" id="password" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="password2">Confirmar senha</label>
+                            <input type="password" class="form-control" name="password2" id="password2" required>
+                        </div>
+                        <button type="submit" class="btn">Cadastrar</button>
+                    </form>
+
+                    <form id="login">
+                        <h2>Login</h2>
+                        <div class="form-group">
+                            <label for="username">Usuário</label>
+                            <input type="text" class="form-control" name="username" id="username" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Senha</label>
+                            <input type="password" class="form-control" name="password" id="password" required>
+                        </div>
+                        <button type="submit" class="btn">Entrar</button>
+                        <button id="semCadastro" onclick="mostrarCadastro()">Não tenho cadastro</button>
+                    </form>
                 </div>
+                <!--</div>
+                </div>-->
             </div>
         </div>
     </div>
@@ -109,7 +110,7 @@
             password: document.getElementById("password").value,
             password2: document.getElementById("password2").value,
         }
-        if(obj.password != obj.password2){
+        if (obj.password != obj.password2) {
             alert("Senha não confirmada! Digite novamente!");
             return;
         }
@@ -139,11 +140,27 @@
 
         var obj = {
             username: document.getElementById("username").value,
-            senha: document.getElementById("password").value,
+            password: document.getElementById("password").value,
         }
+        var json = JSON.stringify(obj);
 
+        var xhr = new XMLHttpRequest();
+        var url = "http://www.henriquesantos.pro.br:8080/api/trello/login";
+        xhr.open("POST", url, "true");
+        xhr.setRequestHeader("Content-type", "application/json");
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                //console.log(xhr.responseText);
+                localStorage.setItem("token", xhr.responseText);
+            }
+            else if (xhr.readyState == 4 && xhr.status == 400) {
+                alert("Não foi encontrado cadastro para " + obj.username + "!");
+            }
+        }
+        xhr.send(json);
     });
 
+    /*
     function recuperarUsuarios() {
         var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function () {
@@ -162,4 +179,5 @@
         xhttp.open("POST", url);
         xhttp.send();
     }
+    */
 </script>

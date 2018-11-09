@@ -9,19 +9,23 @@ h2{
 }
 form{
     display: none;
-}
-.card{
-    margin: 20px;
+    padding: 40px;
+    margin: 40px;
     background-color: rgb(75, 114, 172);
-}
-#infoUsu{
-    margin: 20px;
+    height: 500px;
+    width: 300px;
 }
 body{
     background-image: url("imagens/mailbox.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 button{
     background-color:white;
     color: rgb(75, 114, 172);
-    position: relative;
+}
+#semCadastro{
+    background-color:rgb(75, 114, 172);
+    color: white;
+    border: none;
 }
