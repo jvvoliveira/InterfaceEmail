@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="style.css">
 </head>
 
-<body>
+<body id="inicial">
     <nav class="navbar navbar-expand">
         <a class="navbar-brand" href="#">Email</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
@@ -32,13 +32,7 @@
 
     <div class="container-fluid">
         <div class="row">
-            <!--<div class="col-md-3 col-sm-3">
-            </div>
-            <div class="col-md-3 col-sm-3">
-            </div>-->
             <div class="col-md-3 offset-md-7 col-sm-3 offset-sm-7 col-xs-3 offset-xs-7">
-                <!--<div class="card">
-                    <div class="card-body">-->
                 <div id="infoUsu" class="row">
                     <form id="cadastro">
                         <h2>Cadastro</h2>
@@ -75,8 +69,6 @@
                         <button id="semCadastro" onclick="mostrarCadastro()">Não tenho cadastro</button>
                     </form>
                 </div>
-                <!--</div>
-                </div>-->
             </div>
         </div>
     </div>
@@ -158,26 +150,5 @@
             }
         }
         xhr.send(json);
-    });
-
-    /*
-    function recuperarUsuarios() {
-        var xhttp = new XMLHttpRequest();
-        xhttp.onreadystatechange = function () {
-            console.log(this.readyState);
-            if (this.readyState == 4 && this.status == 200) {
-                var retorno = xhttp.responseText;
-                var retornoJSON = JSON.parse(retorno);
-                retornoJSON.forEach(function (element) {
-                    var item = document.createElement("li");
-                    item.innerHTML = `${element.username} - ${element.token}`;
-                    lista.appendChild(item);
-                });
-            }
-        }
-        var url = "http://www.henriquesantos.pro.br:8080/api/trello/users";
-        xhttp.open("POST", url);
-        xhttp.send();
-    }
-    */
+    });  
 </script>

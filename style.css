@@ -15,7 +15,7 @@ form{
     height: 500px;
     width: 300px;
 }
-body{
+#inicial{
     background-image: url("imagens/mailbox.jpg");
     background-repeat: no-repeat;
     background-size: cover;
@@ -28,4 +28,13 @@ button{
     background-color:rgb(75, 114, 172);
     color: white;
     border: none;
+}
+#principal>a{
+    height: 5px;
+    width: 10px;
+}
+.scroll{
+    position: relative;
+    height: 100px;
+    overflow-y: scroll;
 }
