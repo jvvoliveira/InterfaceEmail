@@ -12,33 +12,47 @@
 <body id="principal">
     <nav class="navbar navbar-expand">
         <a class="navbar-brand" href="#">Email</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown"
             aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-    </nav>
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-2">
-                <div class="row">
-                        <a href="#" class="list-group-item disabled">Caixas de Mensagens</a>
-                    <div class="scroll" data-spy="scroll" data-offset="0">
-                        <div class="list-group">
-                            
-                            <a href="#" class="list-group-item list-group-item-action active">Recebidos</a>
-                            <a href="#" class="list-group-item list-group-item-action">Enviados</a>
-                            <a href="#" class="list-group-item list-group-item-action">propagandas</a>
-                            <a href="#" class="list-group-item list-group-item-action">Spam</a>
-                        </div>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="DropdownContas" role="button" 
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Contas
+                    </a>
+                    <div id="listaContas" class="dropdown-menu" aria-labelledby="DropdownContas">
+                        <a class="dropdown-item" href="#">Pessoal1</a>
+                        <a class="dropdown-item" href="#">Profissional1</a>
+                        <a class="dropdown-item" href="#">Profissional2</a>
                     </div>
+                </li>
+            </ul>
+        </div>
+        <a class="nav-link" href="index.html">Sair</a>
+    </nav>
+    <div class="row container-fluid">
+        <div class="col-md-2">
+            <a href="#" class="list-group-item disabled">Caixas de Mensagens</a>
+            <div class="scroll" data-spy="scroll" data-offset="0">
+                <div id="listaCaixas" class="list-group">
+                    <!--<a href="#" class="list-group-item list-group-item-action active">Recebidos</a>
+                    <a href="#" class="list-group-item list-group-item-action">Enviados</a>
+                    <a href="#" class="list-group-item list-group-item-action">propagandas</a>
+                    <a href="#" class="list-group-item list-group-item-action">Spam</a>-->
                 </div>
             </div>
-
-            <div class="col-md-8">
-                <div class="scroll" data-spy="scroll" data-offset="0">
-                    <h4 id="fat">Remetente</h4>
-                    <p>...</p>
-                    <p>...</p>
+        </div>
+        <div id="corpoMensagens" class="col-md-8">
+            <h4 id="destinatario">Destinatário</h4>
+            <div class="scroll" data-spy="scroll" data-offset="0">
+                <div id="listaMensagens" class="list-group">
+                    <a href="#" class="list-group-item list-group-item-action">Pessoa1 - Mensagem</a>
+                    <a href="#" class="list-group-item list-group-item-action">Pessoa2 - Mensagem</a>
+                    <a href="#" class="list-group-item list-group-item-action">Pessoa3 - Mensagem</a>
+                    <a href="#" class="list-group-item list-group-item-action">Pessoa4 - Mensagem</a>
                 </div>
             </div>
         </div>
@@ -46,3 +60,28 @@
 </body>
 
 </html>
+
+<script>
+    var contas = document.getElementById("listaContas");
+    var caixas = document.getElementById("listaCaixas");
+    
+    var retornoContas = '[{"id": "1","nome":"conta1@email.com","tipo":"pessoal","foto":"conta1.png"},{"id":"2","nome":"conta2@email.com","tipo":"profissional","foto":"conta2.png"}]';
+    var contasOBJ = JSON.parse(retornoContas);
+    var retornoCaixas = '[{"id": "1","nome": "Entrada","tipo": "sistema","conta": "conta1@email.com","icone": "entrada.png"},{"id": "2","nome": "Enviados","tipo": "sistema","conta": "conta1@email.com","icone": "enviados.png"},{"id": "3","nome": "Excluídos","tipo": "sistema","conta": "conta1@email.com","icone": "excluido.png"},{"id": "4","nome": "Spam","tipo": "sistema","conta": "conta1@email.com","icone": "spam.png"},{"id": "5","nome": "Propagandas","tipo": "usuário","conta": "conta1@email.com","icone": "Propagandas.png"}]';
+    var caixasOBJ = JSON.parse(retornoCaixas);
+
+    for(let i = 0; i < contasOBJ.length; i++){  //inserindo nós das contas no dropdown
+        var conta = document.createElement("a");
+        conta.setAttribute("class","dropdown-item");
+        conta.appendChild(document.createTextNode(contasOBJ[i].nome));
+        contas.appendChild(conta);
+        console.log("Conta nome = "+contasOBJ[i].nome);
+    }
+    for(let i = 0; i < caixasOBJ.length; i++){ //inserindo nós das caixas de mensagem no item group
+        var caixa = document.createElement("a");
+        caixa.setAttribute("class","list-group-item list-group-item-action");
+        caixa.appendChild(document.createTextNode(caixasOBJ[i].nome));
+        caixas.appendChild(caixa);
+        console.log("Caixa nome = "+caixasOBJ[i].nome);
+    }
+</script>
