@@ -151,9 +151,10 @@
                 console.log(xhr.responseText);
                 localStorage.setItem("token", xhr.responseText);
                 window.location="pagPrincipal.html"
+                console.log(localStorage.getItem("token"));
             }
             else if (xhr.readyState == 4 && xhr.status == 400) {
-                alert("Não foi encontrado cadastro para " + obj.login + "!");
+                alert("Parâmetros inválidos !");
             }
         }
         xhr.send(json);

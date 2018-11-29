@@ -16,11 +16,12 @@
             aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
+        <a id="novaConta" class="nav-link" href="#">Nova conta</a>
         <div class="collapse navbar-collapse" id="navbarNavDropdown">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="DropdownContas" role="button" 
-                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle" href="#" id="DropdownContas" role="button" data-toggle="dropdown" aria-haspopup="true"
+                        aria-expanded="false">
                         Contas
                     </a>
                     <div id="listaContas" class="dropdown-menu" aria-labelledby="DropdownContas">
@@ -31,10 +32,10 @@
                 </li>
             </ul>
         </div>
-        <a class="nav-link" href="index.html">Sair</a>
+        <a class="nav-link" onclick="sair()" href="#">Sair</a>
     </nav>
     <div class="row container-fluid">
-        <div class="col-md-2">
+        <div class="col-md-2 col-sm-2 col-xm-2">
             <a href="#" class="list-group-item disabled">Caixas de Mensagens</a>
             <div class="scroll" data-spy="scroll" data-offset="0">
                 <div id="listaCaixas" class="list-group">
@@ -45,7 +46,7 @@
                 </div>
             </div>
         </div>
-        <div id="corpoMensagens" class="col-md-8">
+        <div id="corpoMensagens" class="col-md-8 col-sm-8 col-xs-8">
             <h4 id="destinatario">Destinatário</h4>
             <div class="scroll" data-spy="scroll" data-offset="0">
                 <div id="listaMensagens" class="list-group">
@@ -56,32 +57,84 @@
                 </div>
             </div>
         </div>
+
+        <!--
+        <form id="FormNovaConta">
+            <h2>Nova Conta</h2>
+            <div class="form-group">
+                <label for="endereco">Endereço</label>
+                <input type="text" class="form-control" name="endereco" id="endereco" required>
+            </div>
+            <div class="form-group">
+                <label for="tipo">Tipo</label>
+                <input type="text" class="form-control" name="tipo" id="tipo" required>
+            </div>
+            <button type="submit" class="btn">Criar</button>
+        </form>
+        -->
+
     </div>
 </body>
 
 </html>
 
 <script>
+    var destinatario = document.getElementById("destinatario");
+    //destinatario.innerText = // nome da conta que o usuário se encontra
+    var formNovaConta = document.getElementById("formNovaConta");
     var contas = document.getElementById("listaContas");
     var caixas = document.getElementById("listaCaixas");
-    
+
     var retornoContas = '[{"id": "1","nome":"conta1@email.com","tipo":"pessoal","foto":"conta1.png"},{"id":"2","nome":"conta2@email.com","tipo":"profissional","foto":"conta2.png"}]';
     var contasOBJ = JSON.parse(retornoContas);
     var retornoCaixas = '[{"id": "1","nome": "Entrada","tipo": "sistema","conta": "conta1@email.com","icone": "entrada.png"},{"id": "2","nome": "Enviados","tipo": "sistema","conta": "conta1@email.com","icone": "enviados.png"},{"id": "3","nome": "Excluídos","tipo": "sistema","conta": "conta1@email.com","icone": "excluido.png"},{"id": "4","nome": "Spam","tipo": "sistema","conta": "conta1@email.com","icone": "spam.png"},{"id": "5","nome": "Propagandas","tipo": "usuário","conta": "conta1@email.com","icone": "Propagandas.png"}]';
     var caixasOBJ = JSON.parse(retornoCaixas);
 
-    for(let i = 0; i < contasOBJ.length; i++){  //inserindo nós das contas no dropdown
+    for (let i = 0; i < contasOBJ.length; i++) {  //inserindo nós das contas no dropdown
         var conta = document.createElement("a");
-        conta.setAttribute("class","dropdown-item");
+        conta.setAttribute("class", "dropdown-item");
         conta.appendChild(document.createTextNode(contasOBJ[i].nome));
         contas.appendChild(conta);
-        console.log("Conta nome = "+contasOBJ[i].nome);
+        console.log("Conta nome = " + contasOBJ[i].nome);
     }
-    for(let i = 0; i < caixasOBJ.length; i++){ //inserindo nós das caixas de mensagem no item group
+    for (let i = 0; i < caixasOBJ.length; i++) { //inserindo nós das caixas de mensagem no item group
         var caixa = document.createElement("a");
-        caixa.setAttribute("class","list-group-item list-group-item-action");
+        caixa.setAttribute("class", "list-group-item list-group-item-action");
         caixa.appendChild(document.createTextNode(caixasOBJ[i].nome));
         caixas.appendChild(caixa);
-        console.log("Caixa nome = "+caixasOBJ[i].nome);
+        console.log("Caixa nome = " + caixasOBJ[i].nome);
+    }
+    console.log(localStorage.getItem("token"));
+
+    /*formNovaConta.addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        var obj = {
+            endereco: document.getElementById("endereco").value,
+            tipo: document.getElementById("tipo").value,
+            foto: "",
+            token: localStorage.getItem("token") //devolução do token = "token":"euf47346th34uf"
+        }
+
+        var json = JSON.stringify(obj);
+
+        var xhr = new XMLHttpRequest();
+        var url = "http://www.henriquesantos.pro.br:8080/api/email/contas/new";
+        xhr.open("POST", url, "true");
+        xhr.setRequestHeader("Content-type", "application/json");
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                //console.log(xhr.responseText);
+                alert("Conta"+obj.endereco+" criada com sucesso!");
+            }
+            else if (xhr.readyState == 4 && xhr.status == 400) {
+                alert("Erro!");
+            }
+        }
+        xhr.send(json);
+    });*/
+    function sair(){
+        localStorage.removeItem("token");
+        window.location = "index.html"
     }
 </script>
