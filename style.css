@@ -7,7 +7,7 @@ nav{
 h2{
     color:white;
 }
-form{
+.formOculto{
     display: none;
     padding: 40px;
     margin: 40px;

@@ -50,40 +50,63 @@
             <h4 id="destinatario">Destinatário</h4>
             <div class="scroll" data-spy="scroll" data-offset="0">
                 <div id="listaMensagens" class="list-group">
-                    <a href="#" class="list-group-item list-group-item-action">Pessoa1 - Mensagem</a>
+                    <!--<a href="#" class="list-group-item list-group-item-action">Pessoa1 - Mensagem</a>
                     <a href="#" class="list-group-item list-group-item-action">Pessoa2 - Mensagem</a>
                     <a href="#" class="list-group-item list-group-item-action">Pessoa3 - Mensagem</a>
-                    <a href="#" class="list-group-item list-group-item-action">Pessoa4 - Mensagem</a>
+                    <a href="#" class="list-group-item list-group-item-action">Pessoa4 - Mensagem</a>-->
                 </div>
             </div>
         </div>
-
-        <!--
-        <form id="FormNovaConta">
-            <h2>Nova Conta</h2>
-            <div class="form-group">
-                <label for="endereco">Endereço</label>
-                <input type="text" class="form-control" name="endereco" id="endereco" required>
+    </div>
+    <div id="modalNovaConta" class="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Nova Conta</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div>
+                        <form id="formNovaConta">
+                            <div class="form-group">
+                                <label for="endereco">Endereço</label>
+                                <input type="text" class="form-control" name="endereco" id="endereco" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="tipo">Tipo</label>
+                                <input type="text" class="form-control" name="tipo" id="tipo" required>
+                            </div>
+                            <input type="submit" class="btn" value="Criar conta"/>
+                        </form>
+                    </div>
+                    <h1>teste</h1>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
             </div>
-            <div class="form-group">
-                <label for="tipo">Tipo</label>
-                <input type="text" class="form-control" name="tipo" id="tipo" required>
-            </div>
-            <button type="submit" class="btn">Criar</button>
-        </form>
-        -->
-
+        </div>
     </div>
 </body>
 
 </html>
-
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+    crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+    crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+    crossorigin="anonymous"></script>
 <script>
+
     var destinatario = document.getElementById("destinatario");
-    //destinatario.innerText = // nome da conta que o usuário se encontra
     var formNovaConta = document.getElementById("formNovaConta");
+    var modalNovaConta = document.getElementById("modalNovaConta");
     var contas = document.getElementById("listaContas");
     var caixas = document.getElementById("listaCaixas");
+    var novaConta = document.getElementById("novaConta");
 
     var retornoContas = '[{"id": "1","nome":"conta1@email.com","tipo":"pessoal","foto":"conta1.png"},{"id":"2","nome":"conta2@email.com","tipo":"profissional","foto":"conta2.png"}]';
     var contasOBJ = JSON.parse(retornoContas);
@@ -106,7 +129,7 @@
     }
     console.log(localStorage.getItem("token"));
 
-    /*formNovaConta.addEventListener("submit", function (e) {
+    formNovaConta.addEventListener("submit", function (e) {
         e.preventDefault();
 
         var obj = {
@@ -125,15 +148,18 @@
         xhr.onreadystatechange = function () {
             if (xhr.readyState == 4 && xhr.status == 200) {
                 //console.log(xhr.responseText);
-                alert("Conta"+obj.endereco+" criada com sucesso!");
+                alert("Conta" + obj.endereco + " criada com sucesso!");
             }
             else if (xhr.readyState == 4 && xhr.status == 400) {
                 alert("Erro!");
             }
         }
         xhr.send(json);
-    });*/
-    function sair(){
+    });
+    novaConta.addEventListener("click", function () {
+        $('#modalNovaConta').modal();
+    });
+    function sair() {
         localStorage.removeItem("token");
         window.location = "index.html"
     }
