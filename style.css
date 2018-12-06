@@ -39,8 +39,7 @@ button{
     width: 10px;
 }
 .scroll{
-    position: relative;
-    height: 500px;
+    position: relative; 
     overflow-y: scroll;
 }
 #corpoMensagens{
@@ -48,3 +47,4 @@ button{
     color: white;
     border: none;
 }
+

@@ -5,6 +5,7 @@
 <head>
     <meta charset="utf-8">
     <title>Email</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
@@ -20,8 +21,8 @@
         <div class="collapse navbar-collapse" id="navbarNavDropdown">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" onclick="recuperarContas()" href="#" id="DropdownContas" role="button" data-toggle="dropdown" aria-haspopup="true"
-                        aria-expanded="false">
+                    <a class="nav-link dropdown-toggle" onclick="recuperarContas()" href="#" id="DropdownContas" role="button" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
                         Contas
                     </a>
                     <div id="listaContas" class="dropdown-menu" aria-labelledby="DropdownContas">
@@ -31,8 +32,8 @@
         </div>
         <a class="nav-link" onclick="sair()" href="#">Sair</a>
     </nav>
-    <div class="row container-fluid">
-        <div class="col-md-2 col-sm-2 col-xm-2">
+    <div class="row ">
+        <div class="col-md-2 col-sm-2 col-xs-2">
             <a href="#" class="list-group-item disabled">Caixas de Mensagens</a>
             <div class="scroll" data-spy="scroll" data-offset="0">
                 <div id="listaCaixas" class="list-group">
@@ -44,18 +45,18 @@
             </div>
         </div>
         <div id="corpoMensagens" class="col-md-8 col-sm-8 col-xs-8">
-            <h4 id="remetente">Remetente</h4>
+            <h4 id="remetente"></h4>
             <div class="scroll" data-spy="scroll" data-offset="0">
                 <div id="listaMensagens" class="list-group">
-                    <!--<a href="#" class="list-group-item list-group-item-action">Pessoa1 - Mensagem</a>
+                    <a href="#" class="list-group-item list-group-item-action">Pessoa1 - Mensagem</a>
                     <a href="#" class="list-group-item list-group-item-action">Pessoa2 - Mensagem</a>
                     <a href="#" class="list-group-item list-group-item-action">Pessoa3 - Mensagem</a>
-                    <a href="#" class="list-group-item list-group-item-action">Pessoa4 - Mensagem</a>-->
+                    <a href="#" class="list-group-item list-group-item-action">Pessoa4 - Mensagem</a>
                 </div>
             </div>
         </div>
     </div>
-    <div id="modalNovaConta" class="modal" tabindex="-1" role="dialog">
+    <div id="modalNovaConta" class="modal" tabindex="-1" role="dialog" >
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -75,7 +76,9 @@
                                 <label for="tipo">Tipo</label>
                                 <input type="text" class="form-control" name="tipo" id="tipo" required>
                             </div>
-                            <input type="submit" class="btn" value="Criar conta"/>
+                            <button type="submit" class="btn" value="Criar conta">
+                                Criar Conta
+                            </button>
                         </form>
                     </div>
                 </div>
@@ -92,9 +95,26 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
     crossorigin="anonymous"></script>
 <script>
-    var tokenVar = localStorage.getItem("token").substring(9, localStorage.getItem("token").length - 2);
+    //-----------------------------Colocando nome do usuário----------------------------------------
+    var remetente = document.getElementById("remetente");
+    var xhr = new XMLHttpRequest();
+    var url = "http://www.henriquesantos.pro.br:8080/api/email/usuarios/" + localStorage.getItem("token");
+    console.log(url);
+    var pessoa;
+    xhr.open("GET", url, true);
+    xhr.setRequestHeader("Content-type", "application/json");
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState == 4 && xhr.status == 200) {
+            pessoa = JSON.parse(xhr.responseText);
+            remetente.innerHTML = pessoa.nome;
+        }
+        else if (xhr.readyState == 4 && xhr.status == 400) {
+            alert("Erro para recuperar usuário");
+        }
+    }
+    xhr.send();
+    //---------------------------------------------------------------------
 
-    //var remetente = document.getElementById("remetente");
     var formNovaConta = document.getElementById("formNovaConta");
     var modalNovaConta = document.getElementById("modalNovaConta");
     var contasLink = document.getElementById("listaContas");
@@ -124,15 +144,16 @@
 
     formNovaConta.addEventListener("submit", function (e) {
         e.preventDefault();
-        console.log("endereco->"+document.getElementById("endereco").value);
-        console.log("tipo->"+document.getElementById("tipo").value);
-        console.log("token->"+tokenVar);
+
+        console.log("endereco->" + document.getElementById("endereco").value);
+        console.log("tipo->" + document.getElementById("tipo").value);
+        console.log("token->" + localStorage.getItem("token"));
 
         var obj = {
             endereco: document.getElementById("endereco").value,
             tipo: document.getElementById("tipo").value,
             foto: "",
-            token: tokenVar,
+            token: localStorage.getItem("token"),
         }
 
         var json = JSON.stringify(obj);
@@ -144,45 +165,42 @@
         xhr.onreadystatechange = function () {
             if (xhr.readyState == 4 && xhr.status == 200) {
                 //console.log(xhr.responseText);
-                alert("Conta" + obj.endereco + " criada com sucesso!");
+                alert("Conta " + obj.endereco + " criada com sucesso!");
             }
             else if (xhr.readyState == 4 && xhr.status == 400) {
                 alert("Erro!");
             }
         }
         xhr.send(json);
-        
+
     });
     novaConta.addEventListener("click", function () {
         $('#modalNovaConta').modal();
     });
-    function recuperarContas(){
+    function recuperarContas() {
         var xhr = new XMLHttpRequest();
-        var url = "http://www.henriquesantos.pro.br:8080/api/email/contas/"+tokenVar;
+        var url = "http://www.henriquesantos.pro.br:8080/api/email/contas/" + localStorage.getItem("token");
+        console.log(url);
         var contas;
-        xhr.open("GET", url, "true");
+        xhr.open("GET", url, true);
         xhr.setRequestHeader("Content-type", "application/json");
+
         xhr.onreadystatechange = function () {
             if (xhr.readyState == 4 && xhr.status == 200) {
-                console.log("----->"+xhr.responseText);
                 contas = JSON.parse(xhr.responseText);
+                contasLink.innerHTML = ""; //limpar tudo antes de fazer nova chamada
+                for (let i = 0; i < contas.length; i++) {  //inserindo nós das contas no dropdown
+                    var conta = document.createElement("a");
+                    conta.setAttribute("class", "dropdown-item");
+                    conta.appendChild(document.createTextNode(contas[i].endereco));
+                    contasLink.appendChild(conta);
+                }
             }
             else if (xhr.readyState == 4 && xhr.status == 400) {
                 alert("Erro! Crie contas");
             }
         }
-        var n = 0;
-        if(contas != undefined){
-            n = contas.length();
-        }
-        
-        for (let i = 0; i < n; i++) {  //inserindo nós das contas no dropdown
-            var conta = document.createElement("a");
-            conta.setAttribute("class", "dropdown-item");
-            conta.appendChild(document.createTextNode(contas[i].endereco));
-            contasLink.appendChild(conta);
-        }
-        //xhr.send(json);
+        xhr.send();
     }
     function sair() {
         localStorage.removeItem("token");

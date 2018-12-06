@@ -4,8 +4,8 @@
 <head>
     <meta charset="utf-8">
     <title>Email</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
+    <!--<meta name="viewport" content="width=device-width, initial-scale=1">-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
@@ -149,7 +149,8 @@
         xhr.onreadystatechange = function () {
             if (xhr.readyState == 4 && xhr.status == 200) {
                 console.log(xhr.responseText);
-                localStorage.setItem("token", xhr.responseText);
+                var objJson = JSON.parse(xhr.responseText);
+                localStorage.setItem("token", objJson.token);
                 window.location="pagPrincipal.html"
             }
             else if (xhr.readyState == 4 && xhr.status == 400) {
