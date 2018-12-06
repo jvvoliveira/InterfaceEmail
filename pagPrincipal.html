@@ -20,14 +20,11 @@
         <div class="collapse navbar-collapse" id="navbarNavDropdown">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="DropdownContas" role="button" data-toggle="dropdown" aria-haspopup="true"
+                    <a class="nav-link dropdown-toggle" onclick="recuperarContas()" href="#" id="DropdownContas" role="button" data-toggle="dropdown" aria-haspopup="true"
                         aria-expanded="false">
                         Contas
                     </a>
                     <div id="listaContas" class="dropdown-menu" aria-labelledby="DropdownContas">
-                        <a class="dropdown-item" href="#">Pessoal1</a>
-                        <a class="dropdown-item" href="#">Profissional1</a>
-                        <a class="dropdown-item" href="#">Profissional2</a>
                     </div>
                 </li>
             </ul>
@@ -47,7 +44,7 @@
             </div>
         </div>
         <div id="corpoMensagens" class="col-md-8 col-sm-8 col-xs-8">
-            <h4 id="destinatario">Destinatário</h4>
+            <h4 id="remetente">Remetente</h4>
             <div class="scroll" data-spy="scroll" data-offset="0">
                 <div id="listaMensagens" class="list-group">
                     <!--<a href="#" class="list-group-item list-group-item-action">Pessoa1 - Mensagem</a>
@@ -81,11 +78,6 @@
                             <input type="submit" class="btn" value="Criar conta"/>
                         </form>
                     </div>
-                    <h1>teste</h1>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
                 </div>
             </div>
         </div>
@@ -100,26 +92,27 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
     crossorigin="anonymous"></script>
 <script>
+    var tokenVar = localStorage.getItem("token").substring(9, localStorage.getItem("token").length - 2);
 
-    var destinatario = document.getElementById("destinatario");
+    //var remetente = document.getElementById("remetente");
     var formNovaConta = document.getElementById("formNovaConta");
     var modalNovaConta = document.getElementById("modalNovaConta");
-    var contas = document.getElementById("listaContas");
+    var contasLink = document.getElementById("listaContas");
     var caixas = document.getElementById("listaCaixas");
     var novaConta = document.getElementById("novaConta");
 
-    var retornoContas = '[{"id": "1","nome":"conta1@email.com","tipo":"pessoal","foto":"conta1.png"},{"id":"2","nome":"conta2@email.com","tipo":"profissional","foto":"conta2.png"}]';
-    var contasOBJ = JSON.parse(retornoContas);
+    /*var retornoContas = '[{"id": "1","nome":"conta1@email.com","tipo":"pessoal","foto":"conta1.png"},{"id":"2","nome":"conta2@email.com","tipo":"profissional","foto":"conta2.png"}]';
+    var contasOBJ = JSON.parse(retornoContas);*/
     var retornoCaixas = '[{"id": "1","nome": "Entrada","tipo": "sistema","conta": "conta1@email.com","icone": "entrada.png"},{"id": "2","nome": "Enviados","tipo": "sistema","conta": "conta1@email.com","icone": "enviados.png"},{"id": "3","nome": "Excluídos","tipo": "sistema","conta": "conta1@email.com","icone": "excluido.png"},{"id": "4","nome": "Spam","tipo": "sistema","conta": "conta1@email.com","icone": "spam.png"},{"id": "5","nome": "Propagandas","tipo": "usuário","conta": "conta1@email.com","icone": "Propagandas.png"}]';
     var caixasOBJ = JSON.parse(retornoCaixas);
 
-    for (let i = 0; i < contasOBJ.length; i++) {  //inserindo nós das contas no dropdown
+    /*for (let i = 0; i < contasOBJ.length; i++) {  //inserindo nós das contas no dropdown
         var conta = document.createElement("a");
         conta.setAttribute("class", "dropdown-item");
         conta.appendChild(document.createTextNode(contasOBJ[i].nome));
         contas.appendChild(conta);
         console.log("Conta nome = " + contasOBJ[i].nome);
-    }
+    }*/
     for (let i = 0; i < caixasOBJ.length; i++) { //inserindo nós das caixas de mensagem no item group
         var caixa = document.createElement("a");
         caixa.setAttribute("class", "list-group-item list-group-item-action");
@@ -131,12 +124,15 @@
 
     formNovaConta.addEventListener("submit", function (e) {
         e.preventDefault();
+        console.log("endereco->"+document.getElementById("endereco").value);
+        console.log("tipo->"+document.getElementById("tipo").value);
+        console.log("token->"+tokenVar);
 
         var obj = {
             endereco: document.getElementById("endereco").value,
             tipo: document.getElementById("tipo").value,
             foto: "",
-            token: localStorage.getItem("token") //devolução do token = "token":"euf47346th34uf"
+            token: tokenVar,
         }
 
         var json = JSON.stringify(obj);
@@ -155,10 +151,39 @@
             }
         }
         xhr.send(json);
+        
     });
     novaConta.addEventListener("click", function () {
         $('#modalNovaConta').modal();
     });
+    function recuperarContas(){
+        var xhr = new XMLHttpRequest();
+        var url = "http://www.henriquesantos.pro.br:8080/api/email/contas/"+tokenVar;
+        var contas;
+        xhr.open("GET", url, "true");
+        xhr.setRequestHeader("Content-type", "application/json");
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                console.log("----->"+xhr.responseText);
+                contas = JSON.parse(xhr.responseText);
+            }
+            else if (xhr.readyState == 4 && xhr.status == 400) {
+                alert("Erro! Crie contas");
+            }
+        }
+        var n = 0;
+        if(contas != undefined){
+            n = contas.length();
+        }
+        
+        for (let i = 0; i < n; i++) {  //inserindo nós das contas no dropdown
+            var conta = document.createElement("a");
+            conta.setAttribute("class", "dropdown-item");
+            conta.appendChild(document.createTextNode(contas[i].endereco));
+            contasLink.appendChild(conta);
+        }
+        //xhr.send(json);
+    }
     function sair() {
         localStorage.removeItem("token");
         window.location = "index.html"
