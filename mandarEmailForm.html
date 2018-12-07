@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Email</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <form id="formNovaConta">
+                    <div class="form-group">
+                        <label for="para">Para:</label>
+                        <select class="custom-select my-1 mr-sm-2" id="para" name="para" required>
+                            <option selected>Destinatário</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="cc">Cc:</label>
+                        <select class="custom-select my-1 mr-sm-2" id="cc" name="cc">
+                            <option selected>Choose...</option>
+
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="cco">Cco:</label>
+                        <select class="custom-select my-1 mr-sm-2" id="cco" name="cco">
+                            <option selected>Choose...</option>
+
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="assunto">Assunto:</label>
+                        <input type="text" class="form-control" name="assunto" id="assunto" required>
+                    </div>
+                    <div class="form-group">
+                        <textarea class="form-control" id="corpo" rows="5" required></textarea>
+                    </div>
+                    <button id="enviar" type="submit" class="btn" value="Criar conta">
+                        Enviar
+                    </button>
+                    <button type="close" class="btn" value="Criar conta">
+                        Cancelar
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>
+
+<script>
+    var btnEnviar = document.getElementById("enviar");
+    var paraContas = document.getElementById("para");
+    var ccContas = document.getElementById("cc");
+    var ccoContas = document.getElementById("cco");
+    var xhr = new XMLHttpRequest();
+    var url = "http://www.henriquesantos.pro.br:8080/api/email/contas"
+
+    xhr.open("GET", url, true);
+    xhr.setRequestHeader("Content-type", "application/json");
+
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState == 4 && xhr.status == 200) {
+            objContas = JSON.parse(xhr.responseText);
+            paraContas.innerHTML = ""; //limpar tudo antes de fazer nova chamada
+            ccContas.innerHTML = "";
+            ccoContas.innerHTML = "";
+
+            var conta = document.createElement("option");
+            var conta2 = document.createElement("option");
+            var conta3 = document.createElement("option");
+
+            conta.appendChild(document.createTextNode("Destinatário"));
+            //conta.setAttribute("value", -1); //caso o usuário não selecionar ninguem e deixar assim, boa alternativa?
+            conta2.appendChild(document.createTextNode("Cópia"));
+            conta3.appendChild(document.createTextNode("Cópia Oculta"));
+
+            paraContas.appendChild(conta);
+            ccContas.appendChild(conta2);
+            ccoContas.appendChild(conta3);
+
+            for (let i = 0; i < objContas.length; i++) {  //inserindo nós das contas nos 3 selects diferentes (um objeto para cada pai)
+                conta = document.createElement("option");
+                conta2 = document.createElement("option");
+                conta3 = document.createElement("option");
+
+                conta.setAttribute("value", objContas[i].id);
+                conta.appendChild(document.createTextNode(objContas[i].endereco));
+                conta2.setAttribute("value", objContas[i].id);
+                conta2.appendChild(document.createTextNode(objContas[i].endereco));
+                conta3.setAttribute("value", objContas[i].id);
+                conta3.appendChild(document.createTextNode(objContas[i].endereco));
+
+                paraContas.appendChild(conta);
+                ccContas.appendChild(conta2);
+                ccoContas.appendChild(conta3);
+            }
+        }
+        else if (xhr.readyState == 4 && xhr.status == 400) {
+            alert("Erro! Crie contas");
+        }
+    }
+    xhr.send();
+
+    btnEnviar.addEventListener("click",function(e){
+        e.preventDefault();
+
+        var obj = {
+            login: document.getElementById("login").value,
+            nome: document.getElementById("nome").value,
+            sobrenome: document.getElementById("sobrenome").value,
+            cpf: document.getElementById("cpf").value,
+            email_secundario: document.getElementById("email_secundario").value,
+            foto:"",
+            senha: document.getElementById("senha").value
+        }
+
+        var json = JSON.stringify(obj);
+
+        var xhr = new XMLHttpRequest();
+        var url = "http://www.henriquesantos.pro.br:8080/api/email/mensagens_email/enviar";
+        xhr.open("POST", url, "true");
+        xhr.setRequestHeader("Content-type", "application/json");
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                console.log(xhr.responseText);
+                alert(obj.nome + ", seu cadastro foi feito com sucesso!");
+            }
+            else if (xhr.readyState == 4 && xhr.status == 400) {
+                alert("O login " + obj.login + " já existe no sistema!");
+            }
+        }
+        xhr.send(json);
+
+    });
+</script>
