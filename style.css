@@ -25,26 +25,30 @@ h2{
     background-repeat: no-repeat;
     background-size: cover;
 }
-button{
+.buttonBranco{
     background-color:white;
     color: rgb(75, 114, 172);
 }
-#semCadastro{
+.buttonAzul{
     background-color:rgb(75, 114, 172);
     color: white;
-    border: none;
 }
-#principal>a{
+/* #principal>a{
     height: 5px;
     width: 10px;
-}
+} */
 .scroll{
     position: relative; 
+    height: 500px;
     overflow-y: scroll;
 }
 #corpoMensagens{
     background-color:rgb(75, 114, 172);
     color: white;
     border: none;
+    padding: 15px;
+}
+#listaContas{
+    width: 200px; 
 }
 
