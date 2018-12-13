@@ -132,6 +132,7 @@
                 var mensagensCaixa = JSON.parse(xhr.responseText); //mensagens de uma caixa
                 mensagens.innerHTML = ""; //limpar tudo antes de fazer nova chamada
                 for (let i = 0; i < mensagensCaixa.length; i++) {  //inserindo nós das caixas
+                    console.log(mensagensCaixa[i]);
                     var mensagem = document.createElement("a");
                     mensagem.setAttribute("class", "list-group-item list-group-item-action");
                     mensagem.setAttribute("onclick", "abrirMensagem(" + mensagensCaixa[i].id + ")");
@@ -154,12 +155,13 @@
         xhr.onreadystatechange = function () {
             if (xhr.readyState == 4 && xhr.status == 200) {
                 var mensagem = JSON.parse(xhr.responseText);
+                console.log(mensagem);
                 var titulo = document.getElementById("titulo");
                 var remetente = document.getElementById("remetente");
                 var corpo = document.getElementById("conteudo");
-                //adicionar título sendo assunto
-                //adicionar o remetente
-                //adicionar o conteúdo
+                titulo.innerHTML = mensagem[0].assunto;
+                corpo.innerHTML = mensagem[0].corpo;
+                // remetente.innerHTML = ;
                 $('#modalLerMensagem').modal();
             }
             else if (xhr.readyState == 4 && xhr.status == 400) {

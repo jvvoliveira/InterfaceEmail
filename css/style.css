@@ -1,6 +1,9 @@
 a{
     color:white;
 }
+#listaMensagens>a{
+    color:black;
+}
 nav{
     background-color: rgb(75, 114, 172);
 }
@@ -33,10 +36,6 @@ h2{
     background-color:rgb(75, 114, 172);
     color: white;
 }
-/* #principal>a{
-    height: 5px;
-    width: 10px;
-} */
 .scroll{
     position: relative; 
     height: 500px;
