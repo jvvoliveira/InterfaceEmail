@@ -21,13 +21,12 @@
     var formNovaConta = document.getElementById("formNovaConta");
     var modalNovaConta = document.getElementById("modalNovaConta");
     var contas = document.getElementById("listaContas");
-    var confirmaConta = document.getElementById("confirmaConta");
     recuperarContas(); //escrever contas do usuário no select 
     var caixas = document.getElementById("listaCaixas");
     var mensagens = document.getElementById("listaMensagens");
     var novaConta = document.getElementById("novaConta");
     var enviarEmail = document.getElementById("enviarEmail");
-    var contasUsuario, contaSelecionada;
+    var contaSelecionada, pessoaQmandou;
 
     console.log("token: " + localStorage.getItem("token"));
     formNovaConta.addEventListener("submit", function (e) {
@@ -74,7 +73,7 @@
         xhr.setRequestHeader("Content-type", "application/json");
         xhr.onreadystatechange = function () {
             if (xhr.readyState == 4 && xhr.status == 200) {
-                contasUsuario = JSON.parse(xhr.responseText);
+                var contasUsuario = JSON.parse(xhr.responseText);
                 contas.innerHTML = ""; //limpar tudo antes de fazer nova chamada
                 var conta = document.createElement("option");
                 conta.appendChild(document.createTextNode("Escolha uma conta"));
@@ -107,6 +106,7 @@
                 caixas.innerHTML = ""; //limpar tudo antes de fazer nova chamada
                 for (let i = 0; i < caixasUsuario.length; i++) {  //inserindo nós das caixas
                     var caixa = document.createElement("a");
+                    // caixa.setAttribute("class", "list-group-item list-group-item-action");
                     caixa.setAttribute("class", "list-group-item list-group-item-action");
                     caixa.setAttribute("onclick", "recuperarMensagens(" + caixasUsuario[i].id + ")");
                     caixa.appendChild(document.createTextNode(caixasUsuario[i].nome));
@@ -117,6 +117,7 @@
             else if (xhr.readyState == 4 && xhr.status == 400) {
                 alert("Erro para recuperar caixas de mensagens!");
             }
+            mensagens.innerHTML=""; //limpar mensagens da caixa do usuário ao trocar de usuário (preocupação para não confundir as contas)
         }
         xhr.send();
     }
@@ -131,12 +132,16 @@
             if (xhr.readyState == 4 && xhr.status == 200) {
                 var mensagensCaixa = JSON.parse(xhr.responseText); //mensagens de uma caixa
                 mensagens.innerHTML = ""; //limpar tudo antes de fazer nova chamada
-                for (let i = 0; i < mensagensCaixa.length; i++) {  //inserindo nós das caixas
+                for (let i = mensagensCaixa.length - 1; i >= 0; i--) {  //inserindo nós das caixas, mais novos vem na frente
+                    recuperarContaPeloId(mensagensCaixa[i].remetente);
                     console.log(mensagensCaixa[i]);
                     var mensagem = document.createElement("a");
                     mensagem.setAttribute("class", "list-group-item list-group-item-action");
                     mensagem.setAttribute("onclick", "abrirMensagem(" + mensagensCaixa[i].id + ")");
-                    mensagem.appendChild(document.createTextNode(mensagensCaixa[i].assunto));
+                    mensagem.appendChild(document.createTextNode(
+                        pessoaQmandou+" - "+mensagensCaixa[i].assunto
+                        +" ("+mensagensCaixa[i].createdAt.substring(11,16)+" -> "
+                        +mensagensCaixa[i].createdAt.substring(0,10)+")"));
                     mensagens.appendChild(mensagem);
                 }
             }
@@ -155,13 +160,14 @@
         xhr.onreadystatechange = function () {
             if (xhr.readyState == 4 && xhr.status == 200) {
                 var mensagem = JSON.parse(xhr.responseText);
-                console.log(mensagem);
+                // console.log(mensagem);
                 var titulo = document.getElementById("titulo");
                 var remetente = document.getElementById("remetente");
                 var corpo = document.getElementById("conteudo");
                 titulo.innerHTML = mensagem[0].assunto;
                 corpo.innerHTML = mensagem[0].corpo;
-                // remetente.innerHTML = ;
+                // recuperarUsuarioPeloId(mensagem[0].id);
+                remetente.innerHTML = pessoaQmandou;
                 $('#modalLerMensagem').modal();
             }
             else if (xhr.readyState == 4 && xhr.status == 400) {
@@ -260,3 +266,27 @@
         }
         xhr.send(json);
     });
+    function recuperarContaPeloId(id){
+        var xhr = new XMLHttpRequest();
+        var url = "http://www.henriquesantos.pro.br:8080/api/email/contas"; 
+        //existem 78 usuários, preciso recuperar a conta. Como recuperar a conta somente pelo id?
+        xhr.open("GET", url, true);
+        xhr.setRequestHeader("Content-type", "application/json");
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                var todos = JSON.parse(xhr.responseText);
+                // console.log(todos);
+                for(let i = 0; i < todos.length; i++){
+                    if(id == todos[i].id){
+                        // console.log(todos[i].id);
+                        pessoaQmandou = todos[i].endereco;
+                        console.log("pessoa "+pessoaQmandou);
+                    }
+                }
+            }
+            else if (xhr.readyState == 4 && xhr.status == 400) {
+                alert("Erro para retornar remetente!");
+            }
+        }
+        xhr.send();
+    }

@@ -12,12 +12,13 @@
 
 <body id="principal">
     <nav class="navbar navbar-expand">
-        <a class="navbar-brand" href="#">Email</a>
+        <a class="navbar-brand disabled" href="#">Email</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown"
             aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <a id="novaConta" class="nav-link" href="#">Nova conta</a>
+        <a id="novaConta" class="nav-link ml-auto" href="#">Nova conta</a> 
+        <!--ml-auto serve para empurrar links para direita-->
         <a id="enviarEmail" class="nav-link" href="#">Enviar email</a>
 
         <a class="nav-link" onclick="sair()" href="#">Sair</a>
@@ -29,9 +30,11 @@
             </div>
         </div>
         <div id="corpoMensagens" class="col-md-8 col-sm-8 col-xs-8">
-            <h2 id="dono" style="display:inline"></h2>
-            <select class="custom-select my-1 mr-sm-2" id="listaContas" name="listaContas" style="display:inline" onchange="recuperarCaixas(this.value)">
-            </select>
+            <div class="row">
+                <h2 id="dono" class="col-md-8 col-sm-8 col-xs-8" style="display:inline"></h2>
+                <select class="custom-select col-md-3 col-sm-3 col-xs-3" id="listaContas" name="listaContas" style="display:inline" onchange="recuperarCaixas(this.value)">
+                </select>
+            </div>
             <div class="scroll" data-spy="scroll" data-offset="0">
                 <div id="listaMensagens" class="list-group">
                     <!-- <a href="#" class="list-group-item list-group-item-action">Pessoa1 - Mensagem</a>
