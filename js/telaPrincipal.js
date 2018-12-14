@@ -27,6 +27,7 @@
     var novaConta = document.getElementById("novaConta");
     var enviarEmail = document.getElementById("enviarEmail");
     var contaSelecionada, pessoaQmandou;
+    var ultimoActive;
 
     console.log("token: " + localStorage.getItem("token"));
     formNovaConta.addEventListener("submit", function (e) {
@@ -93,6 +94,7 @@
         xhr.send();
     }
     function recuperarCaixas(id) {
+        ultimoActive = undefined; //corrigindo erro do "active" de quando se troca a caixa de mensagens
         contaSelecionada = id;
         console.log("id da conta selecionada: " + contaSelecionada);
         var xhr = new XMLHttpRequest();
@@ -106,10 +108,15 @@
                 caixas.innerHTML = ""; //limpar tudo antes de fazer nova chamada
                 for (let i = 0; i < caixasUsuario.length; i++) {  //inserindo nós das caixas
                     var caixa = document.createElement("a");
+                    var qtd = document.createElement("span"); //variável para informar número de mensagens ao usuário
+                    qtd.setAttribute("class","badge badge-light");
+                    qtd.setAttribute("id","c"+caixasUsuario[i].id);
                     // caixa.setAttribute("class", "list-group-item list-group-item-action");
                     caixa.setAttribute("class", "list-group-item list-group-item-action");
+                    caixa.setAttribute("id", "caixa_"+caixasUsuario[i].id);
                     caixa.setAttribute("onclick", "recuperarMensagens(" + caixasUsuario[i].id + ")");
                     caixa.appendChild(document.createTextNode(caixasUsuario[i].nome));
+                    caixa.appendChild(qtd);
                     caixas.appendChild(caixa);
                     console.log("id da caixa " + (i + 1) + ": " + caixasUsuario[i].id);
                 }
@@ -122,6 +129,15 @@
         xhr.send();
     }
     function recuperarMensagens(id) {
+        if(ultimoActive == undefined){ //caso seja o primeiro click
+            ultimoActive = id;
+            document.getElementById("caixa_"+ultimoActive).classList.add("active"); //adicionando active na caixa selecionada, recuperado pelo ultimoActive
+        }
+        else{ //retirando o active do anterior e adicionando ao novo
+            document.getElementById("caixa_"+ultimoActive).classList.remove("active");
+            ultimoActive = id;
+            document.getElementById("caixa_"+ultimoActive).classList.add("active"); //adicionando active na caixa selecionada, recuperado pelo ultimoActive
+        }
         console.log("caixa: " + id);
         var xhr = new XMLHttpRequest();
         var url = "http://www.henriquesantos.pro.br:8080/api/email/mensagens_email/" + localStorage.getItem("token") + "/conta/" + contaSelecionada + "/caixa/" + id;
@@ -132,15 +148,16 @@
             if (xhr.readyState == 4 && xhr.status == 200) {
                 var mensagensCaixa = JSON.parse(xhr.responseText); //mensagens de uma caixa
                 mensagens.innerHTML = ""; //limpar tudo antes de fazer nova chamada
+                document.getElementById("c"+id).innerHTML = mensagensCaixa.length; //número de mensagens é informado ao usuário
                 for (let i = mensagensCaixa.length - 1; i >= 0; i--) {  //inserindo nós das caixas, mais novos vem na frente
-                    recuperarContaPeloId(mensagensCaixa[i].remetente);
+                    //recuperarContaPeloId(mensagensCaixa[i].remetente);
                     console.log(mensagensCaixa[i]);
                     var mensagem = document.createElement("a");
                     mensagem.setAttribute("class", "list-group-item list-group-item-action");
-                    mensagem.setAttribute("onclick", "abrirMensagem(" + mensagensCaixa[i].id + ")");
+                    mensagem.setAttribute("onclick", "abrirMensagem(" + mensagensCaixa[i].email_contum.id + ")");
                     mensagem.appendChild(document.createTextNode(
-                        pessoaQmandou+" - "+mensagensCaixa[i].assunto
-                        +" ("+mensagensCaixa[i].createdAt.substring(11,16)+" -> "
+                        mensagensCaixa[i].email_contum.endereco+" - "+mensagensCaixa[i].assunto
+                        +" (às "+mensagensCaixa[i].createdAt.substring(11,16)+" do dia "
                         +mensagensCaixa[i].createdAt.substring(0,10)+")"));
                     mensagens.appendChild(mensagem);
                 }
@@ -230,7 +247,7 @@
                 }
             }
             else if (xhr.readyState == 4 && xhr.status == 400) {
-                alert("Erro! Crie contas");
+                alert("Erro!");
             }
         }
         xhr.send();
@@ -269,7 +286,6 @@
     function recuperarContaPeloId(id){
         var xhr = new XMLHttpRequest();
         var url = "http://www.henriquesantos.pro.br:8080/api/email/contas"; 
-        //existem 78 usuários, preciso recuperar a conta. Como recuperar a conta somente pelo id?
         xhr.open("GET", url, true);
         xhr.setRequestHeader("Content-type", "application/json");
         xhr.onreadystatechange = function () {
