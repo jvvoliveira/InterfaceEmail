@@ -26,6 +26,10 @@
             foto:"",
             senha: document.getElementById("senha").value
         }
+        if(obj.senha != document.getElementById("confsenha").value){
+            alert("Senha não foi confirmada!");
+            return;
+        }
 
         var json = JSON.stringify(obj);
 
